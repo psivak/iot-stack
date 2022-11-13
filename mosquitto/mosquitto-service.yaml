@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mosquitto
+  namespace: iot-stack
+spec:
+  type: LoadBalancer
+  selector:
+    app: mosquitto
+  ports:
+  - protocol: TCP
+    port: 8883
+    targetPort: 8883

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  namespace: iot-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      name: mosquitto
+      namespace: iot-stack
+      labels:
+        app: mosquitto
+    spec:
+      containers:
+      - name: mosquitto
+        image: eclipse-mosquitto:2.0.15
+        volumeMounts:
+        - name: data
+          mountPath: /mosquitto/data
+        - name: config
+          mountPath: /mosquitto/config
+        - name: passwd
+          mountPath: /mosquitto/config/passwd
+        - name: certs
+          mountPath: /mosquitto/config/certs
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: mosquitto-data
+      - name: config
+        configMap:
+          name: mosquitto
+      - name: passwd
+        secret:
+          secretName: mosquitto-passwd
+      - name: certs
+        secret:
+          secretName: mosquitto-certs

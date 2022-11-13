@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto
+  namespace: iot-stack
+data:
+  mosquitto.conf: |
+    persistence true
+    persistence_location /mosquitto/data/
+
+    listener 8883
+    protocol mqtt
+    tls_version tlsv1.2
+    
+    allow_anonymous false
+    password_file /mosquitto/config/passwd/passwd
+
+    cafile /mosquitto/config/certs/ca.pem
+    certfile /mosquitto/config/certs/ACME-MQTT-CERT.crt
+    keyfile /mosquitto/config/certs/ACME-MQTT-CERT.key

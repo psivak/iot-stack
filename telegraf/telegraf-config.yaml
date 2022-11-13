@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf
+  namespace: iot-stack
+data:
+  telegraf.conf: |
+    [[outputs.file]]
+      files = ["stdout"]
+
+    [[outputs.sql]]
+    driver = "mysql"
+    data_source_name = "root:secret@tcp(mariadb-0.mariadb)/metrics"
+
+    table_template = "CREATE TABLE {TABLE}({COLUMNS})"
+    table_exists_template = "SELECT 1 FROM {TABLE} LIMIT 1"
+    init_sql = "SET sql_mode='ANSI_QUOTES';"
+
+    [outputs.sql.convert]
+     integer              = "INT"
+     real                 = "DOUBLE"
+     text                 = "TEXT"
+     timestamp            = "TIMESTAMP"
+     defaultvalue         = "TEXT"
+     unsigned             = "UNSIGNED"
+     bool                 = "BOOL"
+
+    [[inputs.mqtt_consumer]]
+      servers = ["ssl://mosquitto:8883"]
+      username = "esp32"
+      password = "6&0#GIruG1"
+      insecure_skip_verify = true
+      topics = [
+        "home/livingroom/temperature"
+      ]

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf
+  namespace: iot-stack
+  labels:
+    app: telegraf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf
+  template:
+    metadata:
+      labels:
+        app: telegraf
+    spec:
+      containers:
+      - name: telegraf
+        image: telegraf:1.22.4
+        volumeMounts:
+        - name: config
+          mountPath: /etc/telegraf
+      volumes:
+      - name: config
+        configMap:
+          name: telegraf
