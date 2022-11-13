@@ -83,7 +83,7 @@ kubectl get all
 
 # Send MQTT message
 ```
-mosquitto_pub -h mqtt.petersivak.com -p 8883 \
+mosquitto_pub -h 172.18.255.200 -p 8883 --insecure \
 --capath /etc/ssl/certs/ \
 -u esp32 -P '6&0#GIruG1' \
 -t 'home/livingroom/temperature' \
